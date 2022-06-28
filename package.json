@@ -1,0 +1,14 @@
+{
+  "name": "sportsbot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "TylerJenningsW <tylerjennings2@outlook.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "eslint": "^8.18.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.7.4"
+  }
+}
