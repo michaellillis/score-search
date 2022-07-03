@@ -8,7 +8,8 @@
     "lint": "eslint src --ext .ts --fix",
     "format": "prettier --write src/**/*.ts",
     "build": "tsc",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "dev:main": "nodemon src/main.ts"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
@@ -21,11 +22,13 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@discordjs/builders": "^0.15.0",
-    "@discordjs/rest": "^0.5.0",
-    "discord-api-types": "^0.35.0",
-    "discord.js": "^13.8.1",
+    "@discordjs/builders": "0.15.0",
+    "@discordjs/rest": "0.5.0",
+    "@types/puppeteer": "^5.4.6",
+    "discord-api-types": "0.35.0",
+    "discord.js": "13.8.1",
     "dotenv": "^16.0.1",
-    "npm-run-all": "^4.1.5"
+    "npm-run-all": "^4.1.5",
+    "puppeteer": "^15.1.1"
   }
 }

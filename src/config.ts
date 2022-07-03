@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
 export const TOKEN = process.env.TOKEN || '';
 export const APPLICATION_ID = process.env.APPLICATION_ID || '';
