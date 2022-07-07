@@ -1,6 +1,4 @@
-import { SlashCommand } from "../types";
-import { FindCommand } from "./find";
+import { SlashCommand } from '../types';
+import { ScoreCommand } from './find';
 
-export const SlashCommands: SlashCommand[] = [
-    FindCommand
-];
+export const SlashCommands: SlashCommand[] = [ScoreCommand];
