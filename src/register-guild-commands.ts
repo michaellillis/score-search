@@ -1,4 +1,3 @@
-
 import { REST } from '@discordjs/rest';
 import { APPLICATION_ID, GUILD_ID, TOKEN } from './config';
 import { SlashCommands } from './slash-commands';

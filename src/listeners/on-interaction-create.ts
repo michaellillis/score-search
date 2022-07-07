@@ -1,4 +1,3 @@
-
 import { Client, CommandInteraction } from 'discord.js';
 import { SlashCommands } from '../slash-commands';
 
