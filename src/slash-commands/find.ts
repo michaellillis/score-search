@@ -3,6 +3,7 @@ import {
   SlashCommandSubcommandBuilder,
 } from '@discordjs/builders';
 import { SlashCommand } from '../types';
+import { scrape } from '../scraper';
 
 export const ScoreCommand: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -10,6 +11,7 @@ export const ScoreCommand: SlashCommand = {
     .setDescription('Returns a game of your choice!'),
   async run(interaction) {
     const args = interaction.options.getString('input');
+    scrape(args);
     await interaction.reply({
       content: args,
     });
