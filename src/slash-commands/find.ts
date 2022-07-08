@@ -11,7 +11,11 @@ export const ScoreCommand: SlashCommand = {
     .setDescription('Returns a game of your choice!'),
   async run(interaction) {
     const args = interaction.options.getString('input');
-    scrape(args);
+    if (args !== null) {
+      scrape(args);
+    } else {
+      await interaction.reply({ content: 'Please enter a team name.' });
+    }
     await interaction.reply({
       content: args,
     });

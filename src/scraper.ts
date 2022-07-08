@@ -1,6 +1,6 @@
 import * as puppeteer from 'puppeteer';
 import { timeout } from './setupTimer';
-export async function scrape(input: any) {
+export async function scrape(input: string) {
   let browser: puppeteer.Browser;
   (async () => {
     const searchQuery = input;
@@ -31,19 +31,13 @@ export async function scrape(input: any) {
 
     if (button) {
       await button.click();
-      await timeout(6000);
-
-      const session = await page.target().createCDPSession();
-      await session.send('Emulation.setPageScaleFactor', {
-        pageScaleFactor: 1.2, // 400%
-      });
+      await timeout(2000);
       const score = await page.waitForSelector(
         '#liveresults-sports-immersive__match-fullpage > div > div:nth-child(2) > div.nGzje > div.imso-hide-loading.imso-mh.PZPZlf',
         {
           visible: true,
         }
       );
-      console.log(score);
       await page.screenshot({
         path: './screenshot.png',
       });
