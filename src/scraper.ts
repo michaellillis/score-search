@@ -1,7 +1,7 @@
 import * as puppeteer from 'puppeteer';
 import { embed } from './embed';
 import { timeout } from './setupTimer';
-export async function scrape(input: string): Promise<string> {
+export function scrape(input: string): string {
   let browser: puppeteer.Browser;
   let url = '';
   (async () => {
