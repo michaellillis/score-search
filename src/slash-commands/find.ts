@@ -1,7 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../types';
 import { scrape } from '../scraper';
-import { timeout } from '../setupTimer';
 
 export const ScoreCommand: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -12,12 +11,18 @@ export const ScoreCommand: SlashCommand = {
     if (args !== null) {
       await interaction.reply({ content: 'Fetching score...' });
       const msg = await scrape(args);
-      await interaction.editReply({ content: msg });
+      await interaction.editReply({
+        content: msg,
+        files: ['./screenshot.png'],
+      });
     } else {
-      await interaction.reply({ content: 'Please enter a team name.' });
+      await interaction.reply({
+        content: 'Please enter a team name.',
+      });
     }
   },
 };
+
 ScoreCommand.command.addSubcommand((subcommand) =>
   subcommand
     .setName('team')
