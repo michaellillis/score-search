@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  SlashCommandSubcommandBuilder,
-} from '@discordjs/builders';
+import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../types';
 import { scrape } from '../scraper';
 
@@ -12,23 +9,21 @@ export const ScoreCommand: SlashCommand = {
   async run(interaction) {
     const args = interaction.options.getString('input');
     if (args !== null) {
-      scrape(args);
+      const scrapeMessage = scrape(args);
+      await interaction.reply({ content: scrapeMessage });
     } else {
       await interaction.reply({ content: 'Please enter a team name.' });
     }
-    await interaction.reply({
-      content: args,
-    });
   },
 };
 ScoreCommand.command.addSubcommand((subcommand) =>
   subcommand
     .setName('team')
-    .setDescription('Searches for ')
+    .setDescription('Searches for the current or past score of a given team.')
     .addStringOption((option) =>
       option
         .setName('input')
-        .setDescription('The name of the team you want to search for')
+        .setDescription('The name of the team you would like to search.')
         .setRequired(true)
     )
 );

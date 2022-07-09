@@ -1,7 +1,9 @@
 import * as puppeteer from 'puppeteer';
+import { embed } from './embed';
 import { timeout } from './setupTimer';
-export async function scrape(input: string) {
+export async function scrape(input: string): Promise<string> {
   let browser: puppeteer.Browser;
+  let url = '';
   (async () => {
     const searchQuery = input;
     browser = await puppeteer.launch();
@@ -42,7 +44,10 @@ export async function scrape(input: string) {
         path: './screenshot.png',
       });
     }
+    url = page.url();
   })()
     .catch((err) => console.error(err))
     .finally(() => browser?.close());
+
+  return embed(url);
 }
