@@ -1,6 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../types';
 import { scrape } from '../scraper';
+import { embed } from '../embed';
+import { MessageAttachment } from 'discord.js';
 
 export const ScoreCommand: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -10,10 +12,12 @@ export const ScoreCommand: SlashCommand = {
     const args = interaction.options.getString('input');
     if (args !== null) {
       await interaction.reply({ content: 'Fetching score...' });
+      const file = new MessageAttachment('./screenshot.png');
       const msg = await scrape(args);
+      const embeddedMessage = embed(msg, args);
       await interaction.editReply({
-        content: msg,
-        files: ['./screenshot.png'],
+        embeds: [embeddedMessage],
+        files: [file],
       });
     } else {
       await interaction.reply({

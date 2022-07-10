@@ -1,4 +1,5 @@
 import * as puppeteer from 'puppeteer';
+import { embed } from './embed';
 import { timeout } from './setupTimer';
 async function logs(browser: puppeteer.Browser): Promise<string> {
   const pages = await browser.pages();
