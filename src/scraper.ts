@@ -1,6 +1,5 @@
 import * as puppeteer from 'puppeteer';
-import { timeout } from './setupTimer';
-import { combine } from './joinWords';
+import { timeout, combine } from './utils';
 async function logs(browser: puppeteer.Browser): Promise<string> {
   const pages = await browser.pages();
   let page;

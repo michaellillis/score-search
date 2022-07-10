@@ -1,8 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../types';
 import { scrape } from '../scraper';
-import { embed } from '../embed';
-import { combine } from '../joinWords';
+import { embed, combine } from '../utils';
 import { MessageAttachment } from 'discord.js';
 import * as fs from 'fs';
 
