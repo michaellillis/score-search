@@ -3,6 +3,7 @@ import { SlashCommand } from '../types';
 import { scrape } from '../scraper';
 import { embed } from '../embed';
 import { MessageAttachment } from 'discord.js';
+import * as fs from 'fs';
 
 export const ScoreCommand: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -11,13 +12,18 @@ export const ScoreCommand: SlashCommand = {
   async run(interaction) {
     const args = interaction.options.getString('input');
     if (args !== null) {
+      const path = `./${args}.png`;
       await interaction.reply({ content: 'Fetching score...' });
-      const file = new MessageAttachment('./screenshot.png');
+      const file = new MessageAttachment(path);
       const msg = await scrape(args);
       const embeddedMessage = embed(msg, args);
       await interaction.editReply({
         embeds: [embeddedMessage],
         files: [file],
+      });
+      fs.unlink(path, (err) => {
+        if (err) throw err;
+        console.log('path was deleted');
       });
     } else {
       await interaction.reply({
