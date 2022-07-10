@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../types';
 import { scrape } from '../scraper';
 import { embed } from '../embed';
+import { combine } from '../joinWords';
 import { MessageAttachment } from 'discord.js';
 import * as fs from 'fs';
 
@@ -12,7 +13,8 @@ export const ScoreCommand: SlashCommand = {
   async run(interaction) {
     const args = interaction.options.getString('input');
     if (args !== null) {
-      const path = `./${args}.png`;
+      const join = combine(args);
+      const path = `./${join}.png`;
       await interaction.reply({ content: 'Fetching score...' });
       const file = new MessageAttachment(path);
       const msg = await scrape(args);

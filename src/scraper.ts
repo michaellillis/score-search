@@ -1,5 +1,6 @@
 import * as puppeteer from 'puppeteer';
 import { timeout } from './setupTimer';
+import { combine } from './joinWords';
 async function logs(browser: puppeteer.Browser): Promise<string> {
   const pages = await browser.pages();
   let page;
@@ -18,7 +19,9 @@ async function logs(browser: puppeteer.Browser): Promise<string> {
 export async function scrape(input: string) {
   let browser: puppeteer.Browser;
   let url: string = '';
-  const path = `./${input}.png`;
+  const join = combine(input);
+  const path = `./${join}.png`;
+
   const searchQuery = input;
   browser = await puppeteer.launch();
   const [page] = await browser.pages();

@@ -1,7 +1,9 @@
 import { MessageEmbed } from 'discord.js';
-
+import { combine } from './joinWords';
 export function embed(url: string, input: string): MessageEmbed {
-  const path = `attachment://${input}.png`;
+  const join = combine(input);
+  const path = `attachment://${join}.png`;
+  console.log(path);
   input = input
     .toLowerCase()
     .split(' ')
