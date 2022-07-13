@@ -15,17 +15,24 @@ export const ScoreCommand: SlashCommand = {
       const join = combine(args);
       const path = `./${join}.png`;
       await interaction.reply({ content: 'Fetching score...' });
-      const file = new MessageAttachment(path);
       const msg = await scrape(args);
-      const embeddedMessage = embed(msg, args);
-      await interaction.editReply({
-        embeds: [embeddedMessage],
-        files: [file],
-      });
-      fs.unlink(path, (err) => {
-        if (err) throw err;
-        console.log('path was deleted');
-      });
+      if (msg !== 'not live') {
+        const file = new MessageAttachment(path);
+        const embeddedMessage = embed(msg, args);
+        await interaction.editReply({
+          embeds: [embeddedMessage],
+          files: [file],
+        });
+        fs.unlink(path, (err) => {
+          if (err) throw err;
+          console.log('path was deleted');
+        });
+      } else {
+        const embeddedMessage = embed(msg, args);
+        await interaction.editReply({
+          embeds: [embeddedMessage],
+        });
+      }
     } else {
       await interaction.reply({
         content: 'Please enter a team name.',
