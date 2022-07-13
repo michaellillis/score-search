@@ -16,6 +16,7 @@ async function logs(browser: puppeteer.Browser): Promise<string> {
   }
 }
 export async function scrape(input: string) {
+  let live = true;
   let browser: puppeteer.Browser;
   let url: string = '';
   const join = combine(input);
@@ -46,12 +47,22 @@ export async function scrape(input: string) {
   );
   if (button) {
     await button.click();
-    await page.waitForSelector(
-      '#liveresults-sports-immersive__match-fullpage > div > div:nth-child(2) > div.nGzje > div.imso-hide-loading.imso-mh.PZPZlf',
-      {
-        visible: true,
-      }
-    );
+    try {
+      await page.waitForSelector(
+        '#liveresults-sports-immersive__match-fullpage > div > div:nth-child(2) > div.nGzje > div.imso-hide-loading.imso-mh.PZPZlf',
+        {
+          visible: true,
+        }
+      );
+    } catch {
+      console.log('Not live');
+      live = false;
+    }
+    if (live === false) {
+      await page.waitForSelector(
+        '#liveresults-sports-immersive__match-fullpage > div > div:nth-child(3) > div.nGzje > div.imso-hide-loading.imso-mh.PZPZlf > div:nth-child(2) > div > div > div > div.imso_mh__tm-scr.imso_mh__mh-bd > div > div.imso_mh__tm-a-sts > div.imso-ani.imso_mh__tas'
+      );
+    }
     url = await logs(browser);
     await page.screenshot({
       path: path,
