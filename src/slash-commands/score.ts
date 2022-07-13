@@ -27,6 +27,7 @@ export const ScoreCommand: SlashCommand = {
         const file = new MessageAttachment(path);
         const embeddedMessage = embed(msg, args);
         await interaction.editReply({
+          content: null,
           embeds: [embeddedMessage],
           files: [file],
         });
