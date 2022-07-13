@@ -17,6 +17,7 @@ async function logs(browser: puppeteer.Browser): Promise<string> {
 }
 export async function scrape(input: string) {
   let live = true;
+  let playing = true;
   let browser: puppeteer.Browser;
   let url: string = '';
   const join = combine(input);
@@ -36,12 +37,19 @@ export async function scrape(input: string) {
   await page.waitForSelector('input[aria-label="Search"]', { visible: true });
   await page.type('input[aria-label="Search"]', searchQuery);
   await Promise.all([page.waitForNavigation(), page.keyboard.press('Enter')]);
-  await page.waitForSelector(
-    '#sports-app > div > div.abhAW.imso-hov.imso-mh.PZPZlf > div > div > div > div > div.imso_mh__tm-scr.imso_mh__mh-bd.imso-hov',
-    {
-      visible: true,
-    }
-  );
+  try {
+    await page.waitForSelector(
+      '#sports-app > div > div.abhAW.imso-hov.imso-mh.PZPZlf > div > div > div > div > div.imso_mh__tm-scr.imso_mh__mh-bd.imso-hov',
+      {
+        visible: true,
+      }
+    );
+  } catch {
+    playing = false;
+    url = 'not live';
+  }
+  if (playing === true) {
+  }
   const [button] = await page.$x(
     '/html/body/div[7]/div/div[10]/div[1]/div[2]/div[2]/div/div/div[1]/block-component/div/div[1]/div/div/div/div[1]/div/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[1]/div[2]/div[1]/div/div[1]/div[2]/div/span'
   );
@@ -50,6 +58,12 @@ export async function scrape(input: string) {
     try {
       await page.waitForSelector(
         '#liveresults-sports-immersive__match-fullpage > div > div:nth-child(2) > div.nGzje > div.imso-hide-loading.imso-mh.PZPZlf',
+        {
+          visible: true,
+        }
+      );
+      await page.waitForSelector(
+        '#liveresults-sports-immersive__match-fullpage > div > div:nth-child(2) > div.nGzje > div.imso-hide-loading.imso-mh.PZPZlf > div > div > div > div > div.imso_mh__tm-scr.imso_mh__mh-bd > div.imso_mh__score-sum.imso-ani > div > div',
         {
           visible: true,
         }
@@ -67,6 +81,8 @@ export async function scrape(input: string) {
     await page.screenshot({
       path: path,
     });
+  } else {
+    url = `The ${searchQuery}'s team isn't playing.`;
   }
   browser?.close();
   return url;
