@@ -4,16 +4,20 @@ export function embed(url: string, input: string): MessageEmbed {
   const join = combine(input);
   const path = `attachment://${join}.png`;
   console.log(path);
-  input = input
-    .toLowerCase()
-    .split(' ')
-    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-    .join(' ');
-
+  let splitinput: string = '';
+  if (input.indexOf(' ') >= 0) {
+    splitinput = input
+      .toLowerCase()
+      .split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ');
+  } else {
+    splitinput = input[0].toUpperCase() + input.substring(1);
+  }
   const embed = new MessageEmbed()
-    .setTitle(`${input} Game`)
+    .setTitle(`${splitinput} Game`)
     .setColor('#0099ff')
-    .setDescription(`[Link to the ${input} game!](${url})`)
+    .setDescription(`[Link to the ${splitinput} game!](${url})`)
     .setImage(path)
     .setTimestamp();
 

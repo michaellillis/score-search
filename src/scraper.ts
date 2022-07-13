@@ -35,7 +35,6 @@ export async function scrape(input: string) {
   await page.waitForSelector('input[aria-label="Search"]', { visible: true });
   await page.type('input[aria-label="Search"]', searchQuery);
   await Promise.all([page.waitForNavigation(), page.keyboard.press('Enter')]);
-  await timeout(3000);
   await page.waitForSelector(
     '#sports-app > div > div.abhAW.imso-hov.imso-mh.PZPZlf > div > div > div > div > div.imso_mh__tm-scr.imso_mh__mh-bd.imso-hov',
     {
@@ -47,7 +46,6 @@ export async function scrape(input: string) {
   );
   if (button) {
     await button.click();
-    await timeout(4000);
     await page.waitForSelector(
       '#liveresults-sports-immersive__match-fullpage > div > div:nth-child(2) > div.nGzje > div.imso-hide-loading.imso-mh.PZPZlf',
       {
