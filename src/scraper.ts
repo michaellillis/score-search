@@ -42,6 +42,7 @@ export async function scrape(input: string) {
       '#sports-app > div > div.abhAW.imso-hov.imso-mh.PZPZlf > div > div > div > div > div.imso_mh__tm-scr.imso_mh__mh-bd.imso-hov',
       {
         visible: true,
+        timeout: 10000,
       }
     );
   } catch {
