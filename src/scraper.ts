@@ -1,5 +1,5 @@
 import * as puppeteer from 'puppeteer';
-import { timeout, combine } from './utils';
+import { combine } from './utils';
 async function logs(browser: puppeteer.Browser): Promise<string> {
   const pages = await browser.pages();
   let page;
@@ -15,6 +15,44 @@ async function logs(browser: puppeteer.Browser): Promise<string> {
     return 'Undefined';
   }
 }
+const waitTillHTMLRendered = async (page: puppeteer.Page, timeout = 3000) => {
+  const checkDurationMsecs = 1000;
+  const maxChecks = timeout / checkDurationMsecs;
+  let lastHTMLSize = 0;
+  let checkCounts = 1;
+  let countStableSizeIterations = 0;
+  const minStableSizeIterations = 3;
+
+  while (checkCounts++ <= maxChecks) {
+    let html = await page.content();
+    let currentHTMLSize = html.length;
+
+    let bodyHTMLSize = await page.evaluate(
+      () => document.body.innerHTML.length
+    );
+
+    console.log(
+      'last: ',
+      lastHTMLSize,
+      ' <> curr: ',
+      currentHTMLSize,
+      ' body html size: ',
+      bodyHTMLSize
+    );
+
+    if (lastHTMLSize != 0 && currentHTMLSize == lastHTMLSize)
+      countStableSizeIterations++;
+    else countStableSizeIterations = 0; //reset the counter
+
+    if (countStableSizeIterations >= minStableSizeIterations) {
+      console.log('Page rendered fully..');
+      break;
+    }
+
+    lastHTMLSize = currentHTMLSize;
+    await page.waitForTimeout(checkDurationMsecs);
+  }
+};
 export async function scrape(input: string) {
   let live = true;
   let playing = true;
@@ -56,26 +94,13 @@ export async function scrape(input: string) {
     if (button) {
       await button.click();
       try {
-        await page.waitForSelector(
-          '#liveresults-sports-immersive__match-fullpage > div > div:nth-child(2) > div.nGzje > div.imso-hide-loading.imso-mh.PZPZlf',
-          {
-            visible: true,
-          }
-        );
-        await page.waitForSelector(
-          '#liveresults-sports-immersive__match-fullpage > div > div:nth-child(2) > div.nGzje > div.imso-hide-loading.imso-mh.PZPZlf > div > div > div > div > div.imso_mh__tm-scr.imso_mh__mh-bd > div.imso_mh__score-sum.imso-ani > div > div',
-          {
-            visible: true,
-          }
-        );
+        await waitTillHTMLRendered(page);
       } catch {
         console.log('Not live');
         live = false;
       }
       if (live === false) {
-        await page.waitForSelector(
-          '#liveresults-sports-immersive__match-fullpage > div > div:nth-child(3) > div.nGzje > div.imso-hide-loading.imso-mh.PZPZlf > div:nth-child(2) > div > div > div > div.imso_mh__tm-scr.imso_mh__mh-bd > div > div.imso_mh__tm-a-sts > div.imso-ani.imso_mh__tas'
-        );
+        await waitTillHTMLRendered(page);
       }
       url = await logs(browser);
       await page.screenshot({
