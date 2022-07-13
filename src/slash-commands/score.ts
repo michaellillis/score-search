@@ -5,13 +5,20 @@ import { embed, combine } from '../utils';
 import { MessageAttachment } from 'discord.js';
 import * as fs from 'fs';
 
+const usedCommandRecently = new Set();
+
 export const ScoreCommand: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('score')
     .setDescription('Returns a game of your choice!'),
   async run(interaction) {
     const args = interaction.options.getString('input');
-    if (args !== null) {
+    if (usedCommandRecently.has(interaction.user.id)) {
+      await interaction.reply({
+        content:
+          'Please wait at least 15 seconds before using this command again.',
+      });
+    } else if (args !== null) {
       const join = combine(args);
       const path = `./${join}.png`;
       await interaction.reply({ content: 'Fetching score...' });
@@ -27,6 +34,10 @@ export const ScoreCommand: SlashCommand = {
           if (err) throw err;
           console.log('path was deleted');
         });
+        usedCommandRecently.add(interaction.user.id);
+        setTimeout(() => {
+          usedCommandRecently.delete(interaction.user.id);
+        }, 15000);
       } else {
         const embeddedMessage = embed(msg, args);
         await interaction.editReply({
