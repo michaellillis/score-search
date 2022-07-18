@@ -1,5 +1,6 @@
 import * as puppeteer from 'puppeteer';
 import { combine } from './utils';
+// import * as styles from './style.css';
 async function logs(browser: puppeteer.Browser): Promise<string> {
   const pages = await browser.pages();
   let page;
@@ -108,13 +109,18 @@ export async function scrape(input: string) {
         url = await logs(browser);
         const newUrl = url.replace('recap', 'boxscore');
         await page.goto(newUrl);
-        let div_selector_to_remove = 'hud-container';
-        await page.evaluate((sel) => {
-          var elements = document.querySelectorAll(sel);
-          for (var i = 0; i < elements.length; i++) {
-            elements[i].parentNode?.removeChild(elements[i]);
-          }
-        }, div_selector_to_remove);
+        await page.addStyleTag({ path: 'style.css' });
+        // await page.addStyleTag({
+        //   content:
+        //     '#hud-container{top: 0px !important;} #mantle_skin{margin-top: 5% !important;} body{font-size: 120% !important;} .atl-container{display: none; }',
+        // });
+        // let div_selector_to_remove = 'hud-container';
+        // await page.evaluate((sel) => {
+        //   var elements = document.querySelectorAll(sel);
+        //   for (var i = 0; i < elements.length; i++) {
+        //     elements[i].parentNode?.removeChild(elements[i]);
+        //   }
+        // }, div_selector_to_remove);
       } catch {
         console.log('Not live');
         live = false;

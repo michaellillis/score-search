@@ -1,0 +1,31 @@
+/* BASKETBALL PAGE CHANGES */
+div.bp-desktopLGPlus .page-container {
+  width: 100%;
+}
+
+div.wrapper {
+  width: 48%;
+  display: inline-table;
+  margin: 0% 1% 0% 1%;
+}
+
+.PageLayout__RightAside {
+  display: none;
+}
+
+.Wrapper.Card__Content {
+  width: 100%;
+}
+
+/* FOOTBALL PAGE CHANGES */
+div#gamepackage-news {
+  display: none;
+}
+
+.tertiary-nav-container {
+  display: none;
+}
+
+.table__TD {
+  font-size: 120% !important;
+}
