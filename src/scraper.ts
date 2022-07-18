@@ -15,6 +15,15 @@ async function logs(browser: puppeteer.Browser): Promise<string> {
     return 'Undefined';
   }
 }
+
+async function search(page: puppeteer.Page, searchQuery: string) {
+  await page.goto('https://www.google.com/', {
+    waitUntil: 'domcontentloaded',
+  });
+  await page.waitForSelector('input[aria-label="Search"]', { visible: true });
+  await page.type('input[aria-label="Search"]', searchQuery);
+  await Promise.all([page.waitForNavigation(), page.keyboard.press('Enter')]);
+}
 const waitTillHTMLRendered = async (page: puppeteer.Page, timeout = 3000) => {
   const checkDurationMsecs = 1000;
   const maxChecks = timeout / checkDurationMsecs;
@@ -62,39 +71,50 @@ export async function scrape(input: string) {
   const path = `./${join}.png`;
 
   const searchQuery = input;
+  const cbs = `${input} cbs sports`;
   browser = await puppeteer.launch();
   const [page] = await browser.pages();
   await page.setViewport({
-    width: 1920 / 2,
-    height: 1080 / 2,
-    deviceScaleFactor: 2,
+    width: 1000,
+    height: 900,
+    deviceScaleFactor: 4,
   });
-  await page.goto('https://www.google.com/', {
-    waitUntil: 'domcontentloaded',
-  });
-  await page.waitForSelector('input[aria-label="Search"]', { visible: true });
-  await page.type('input[aria-label="Search"]', searchQuery);
-  await Promise.all([page.waitForNavigation(), page.keyboard.press('Enter')]);
   try {
-    await page.waitForSelector(
-      '#sports-app > div > div.abhAW.imso-hov.imso-mh.PZPZlf > div > div > div > div > div.imso_mh__tm-scr.imso_mh__mh-bd.imso-hov',
-      {
-        visible: true,
-        timeout: 10000,
-      }
+    await search(page, cbs);
+    const yourHref = await page.$eval(
+      '#rso > div:nth-child(1) > div > div.NJo7tc.Z26q7c.uUuwM.jGGQ5e > div > a',
+      (anchor) => anchor.getAttribute('href')
     );
+    if (yourHref !== null) {
+      await page.goto(yourHref);
+    }
   } catch {
     playing = false;
     url = 'not live';
   }
   if (playing === true) {
     const [button] = await page.$x(
-      '/html/body/div[7]/div/div[10]/div[1]/div[2]/div[2]/div/div/div[1]/block-component/div/div[1]/div/div/div/div[1]/div/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[1]/div[2]/div[1]/div/div[1]/div[2]/div/span'
+      '/html/body/div[4]/div/main/div[1]/section/div/div[3]/a'
     );
     if (button) {
       await button.click();
       try {
-        await waitTillHTMLRendered(page);
+        await page.waitForSelector(
+          '#page-content > div.test.gt-react-wrapper > div > div.gametracker-app__tab-links.gametracker-app__tab-links--desktop > div:nth-child(2)',
+          {
+            visible: true,
+          }
+        );
+        url = await logs(browser);
+        const newUrl = url.replace('recap', 'boxscore');
+        await page.goto(newUrl);
+        let div_selector_to_remove = 'hud-container';
+        await page.evaluate((sel) => {
+          var elements = document.querySelectorAll(sel);
+          for (var i = 0; i < elements.length; i++) {
+            elements[i].parentNode?.removeChild(elements[i]);
+          }
+        }, div_selector_to_remove);
       } catch {
         console.log('Not live');
         live = false;
