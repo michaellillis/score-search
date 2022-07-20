@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../types';
 import { scrape } from '../scraper';
 import { embed, combine } from '../utils';
-import { MessageAttachment } from 'discord.js';
+import { MessageAttachment, Permissions } from 'discord.js';
 import * as fs from 'fs';
 
 const usedCommandRecently = new Set();
@@ -13,6 +13,12 @@ export const ScoreCommand: SlashCommand = {
     .setDescription('Returns a game of your choice!'),
   async run(interaction) {
     const args = interaction.options.getString('input');
+
+    if (!interaction.memberPermissions === null)
+      await interaction.reply({
+        content: 'You do not have permission to use this command.',
+      });
+
     if (usedCommandRecently.has(interaction.user.id)) {
       await interaction.reply({
         content:

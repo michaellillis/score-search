@@ -64,15 +64,13 @@ const waitTillHTMLRendered = async (page: puppeteer.Page, timeout = 3000) => {
   }
 };
 export async function scrape(input: string) {
-  let live = true;
-  let playing = true;
   let browser: puppeteer.Browser;
   let url: string = '';
   const join = combine(input);
   const path = `./${join}.png`;
 
   const searchQuery = input;
-  const cbs = `${input} cbs sports`;
+  const espn = `${input} espn`;
   browser = await puppeteer.launch();
   const [page] = await browser.pages();
   await page.setViewport({
@@ -80,62 +78,55 @@ export async function scrape(input: string) {
     height: 900,
     deviceScaleFactor: 4,
   });
+
+  await search(page, espn);
+  await Promise.all([page.click('#search a'), page.waitForNavigation()]);
+  url = await logs(browser);
+
   try {
-    await search(page, cbs);
-    const yourHref = await page.$eval(
-      '#rso > div:nth-child(1) > div > div.NJo7tc.Z26q7c.uUuwM.jGGQ5e > div > a',
-      (anchor) => anchor.getAttribute('href')
-    );
-    if (yourHref !== null) {
-      await page.goto(yourHref);
+    if (url.includes('team')) {
+      await Promise.all([page.click('.Schedule a'), page.waitForNavigation()]);
     }
+    const [boxScore] = await page.$x('//a[contains(., "Box Score")]');
+    await boxScore.click();
+
+    // await page.addStyleTag({ path: 'style.css' });
+
+    // if (button) {
+    // await button.click();
+    // await page.waitForSelector(
+    //   '#page-content > div.test.gt-react-wrapper > div > div.gametracker-app__tab-links.gametracker-app__tab-links--desktop > div:nth-child(2)',
+    //   {
+    //     visible: true,
+    //   }
+    // );
+    // url = await logs(browser);
+    // const newUrl = url.replace('recap', 'boxscore');
+    // await page.goto(newUrl);
+    // await page.addStyleTag({
+    //   content:
+    //     '#hud-container{top: 0px !important;} #mantle_skin{margin-top: 5% !important;} body{font-size: 120% !important;} .atl-container{display: none; }',
+    // });
+    // let div_selector_to_remove = 'hud-container';
+    // await page.evaluate((sel) => {
+    //   var elements = document.querySelectorAll(sel);
+    //   for (var i = 0; i < elements.length; i++) {
+    //     elements[i].parentNode?.removeChild(elements[i]);
+    //   }
+    // }, div_selector_to_remove);
   } catch {
-    playing = false;
-    url = 'not live';
+    console.log('ERROR: Could not locate game on ESPN.');
   }
-  if (playing === true) {
-    const [button] = await page.$x(
-      '/html/body/div[4]/div/main/div[1]/section/div/div[3]/a'
-    );
-    if (button) {
-      await button.click();
-      try {
-        await page.waitForSelector(
-          '#page-content > div.test.gt-react-wrapper > div > div.gametracker-app__tab-links.gametracker-app__tab-links--desktop > div:nth-child(2)',
-          {
-            visible: true,
-          }
-        );
-        url = await logs(browser);
-        const newUrl = url.replace('recap', 'boxscore');
-        await page.goto(newUrl);
-        await page.addStyleTag({ path: 'style.css' });
-        // await page.addStyleTag({
-        //   content:
-        //     '#hud-container{top: 0px !important;} #mantle_skin{margin-top: 5% !important;} body{font-size: 120% !important;} .atl-container{display: none; }',
-        // });
-        // let div_selector_to_remove = 'hud-container';
-        // await page.evaluate((sel) => {
-        //   var elements = document.querySelectorAll(sel);
-        //   for (var i = 0; i < elements.length; i++) {
-        //     elements[i].parentNode?.removeChild(elements[i]);
-        //   }
-        // }, div_selector_to_remove);
-      } catch {
-        console.log('Not live');
-        live = false;
-      }
-      if (live === false) {
-        await waitTillHTMLRendered(page);
-      }
-      url = await logs(browser);
-      await page.screenshot({
-        path: path,
-      });
-    } else {
-      url = `The ${searchQuery}'s team isn't playing.`;
-    }
-  }
+  // if (live === false) {
+  //   await waitTillHTMLRendered(page);
+  // }
+  url = await logs(browser);
+  await page.screenshot({
+    path: path,
+  });
+  // } else {
+  // url = `The ${searchQuery}'s team isn't playing.`;
+  // }
   browser?.close();
   return url;
 }
