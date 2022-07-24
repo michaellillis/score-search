@@ -1,7 +1,7 @@
 import { MessageEmbed } from 'discord.js';
 import { combine } from './joinWords';
 export function embed(url: string, input: string): MessageEmbed {
-  if (url !== 'not live') {
+  if (url === 'not live') {
     const join = combine(input);
     const path = `attachment://${join}.png`;
     console.log(path);

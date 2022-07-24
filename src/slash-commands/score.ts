@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../types';
 import { scrape } from '../scraper';
+import { backupScrape } from '../backupScraper';
 import { embed, combine } from '../utils';
 import { MessageAttachment, Permissions } from 'discord.js';
 import * as fs from 'fs';
@@ -28,7 +29,11 @@ export const ScoreCommand: SlashCommand = {
       const join = combine(args);
       const path = `./${join}.png`;
       await interaction.reply({ content: 'Fetching score...' });
-      const msg = await scrape(args);
+      let msg = '';
+      msg = await scrape(args);
+      if (msg === 'google') {
+        msg = await backupScrape(args);
+      }
       if (msg !== 'not live') {
         const file = new MessageAttachment(path);
         const embeddedMessage = embed(msg, args);

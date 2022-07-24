@@ -3,10 +3,18 @@ div.bp-desktopLGPlus .page-container {
   width: 100%;
 }
 
-div.wrapper {
+div.Wrapper {
   width: 48%;
   display: inline-table;
   margin: 0% 1% 0% 1%;
+}
+
+div.bp-desktopLGPlus .Ad--banner {
+  display: none;
+}
+
+div.bp-desktopLGPlus .sponsored-content {
+  display: none;
 }
 
 .PageLayout__RightAside {
@@ -17,7 +25,7 @@ div.wrapper {
   width: 100%;
 }
 
-/* FOOTBALL PAGE CHANGES */
+/* FOOTBALL PAGE CHANGES
 div#gamepackage-news {
   display: none;
 }
@@ -29,3 +37,4 @@ div#gamepackage-news {
 .table__TD {
   font-size: 120% !important;
 }
+*\
