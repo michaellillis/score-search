@@ -25,6 +25,9 @@ div.bp-desktopLGPlus .sponsored-content {
   width: 100%;
 }
 
+.Table__TD {
+  font-size: 20px;
+}
 /* FOOTBALL PAGE CHANGES
 div#gamepackage-news {
   display: none;
@@ -34,7 +37,4 @@ div#gamepackage-news {
   display: none;
 }
 
-.table__TD {
-  font-size: 120% !important;
-}
 *\
