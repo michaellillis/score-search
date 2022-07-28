@@ -1,3 +1,4 @@
+import { SharedNameAndDescription } from '@discordjs/builders';
 import * as puppeteer from 'puppeteer';
 import { combine, urlToString, waitTillHTMLRendered, search } from './utils';
 export async function backupScrape(input: string) {
@@ -63,6 +64,10 @@ export async function backupScrape(input: string) {
     await page.screenshot({
       path: path,
     });
+    const getSecond = await page.waitForSelector(
+      '#liveresults-sports-immersive__match-fullpage > div > div:nth-child(2) > div.nGzje > div:nth-child(3) > div > div.tb_h.ie7Asb.Hr51pb.imso-medium-font.TbbqEc.imso-ani.YPgUJe.B27Eaf > div > ol > li:nth-child(2)'
+    );
+    await getSecond?.click();
   }
   browser?.close();
   return url;

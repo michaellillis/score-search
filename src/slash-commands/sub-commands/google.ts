@@ -3,18 +3,10 @@ import { backupScrape } from '../../backupScraper';
 import { embed, combine } from '../../utils';
 import { MessageAttachment } from 'discord.js';
 import * as fs from 'fs';
-export async function google(
-  interaction: CommandInteraction,
-  usedCommandRecently: Set<any>
-) {
+export async function google(interaction: CommandInteraction) {
   console.log('used google');
   const args = interaction.options.getString('input');
-  if (usedCommandRecently.has(interaction.user.id)) {
-    await interaction.reply({
-      content:
-        'Please wait at least 15 seconds before using this command again.',
-    });
-  } else if (args !== null) {
+  if (args !== null) {
     const join = combine(args);
     const path = `./${join}.png`;
     await interaction.reply({ content: 'Fetching score...' });
@@ -32,10 +24,6 @@ export async function google(
         if (err) throw err;
         console.log('path was deleted');
       });
-      usedCommandRecently.add(interaction.user.id);
-      setTimeout(() => {
-        usedCommandRecently.delete(interaction.user.id);
-      }, 15000);
     } else {
       const embeddedMessage = embed(msg, args);
       await interaction.editReply({

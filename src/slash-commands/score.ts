@@ -9,12 +9,26 @@ export const ScoreCommand: SlashCommand = {
     .setName('score')
     .setDescription('Returns a game of your choice!'),
   async run(interaction) {
-    if (interaction.options.getSubcommand() === 'team') {
-      await team(interaction, usedCommandRecently);
-    } else if (interaction.options.getSubcommand() === 'google') {
-      await google(interaction, usedCommandRecently);
-    } else if (interaction.options.getSubcommand() === 'espn') {
-      await espn(interaction, usedCommandRecently);
+    if (usedCommandRecently.has(interaction.user.id)) {
+      await interaction.reply({
+        content:
+          'Please wait at least 15 seconds before using this command again.',
+      });
+    } else {
+      const addCooldown = usedCommandRecently.add(interaction.user.id);
+      setTimeout(() => {
+        usedCommandRecently.delete(interaction.user.id);
+      }, 15000);
+      if (interaction.options.getSubcommand() === 'team') {
+        addCooldown;
+        await team(interaction);
+      } else if (interaction.options.getSubcommand() === 'google') {
+        addCooldown;
+        await google(interaction);
+      } else if (interaction.options.getSubcommand() === 'espn') {
+        addCooldown;
+        await espn(interaction);
+      }
     }
   },
 };
