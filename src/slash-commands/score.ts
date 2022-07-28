@@ -1,10 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../types';
-import { scrape } from '../scraper';
-import { backupScrape } from '../backupScraper';
-import { embed, combine } from '../utils';
-import { MessageAttachment, Permissions } from 'discord.js';
-import * as fs from 'fs';
+import { team, google, espn } from './sub-commands';
 
 const usedCommandRecently = new Set();
 
@@ -13,53 +9,12 @@ export const ScoreCommand: SlashCommand = {
     .setName('score')
     .setDescription('Returns a game of your choice!'),
   async run(interaction) {
-    const args = interaction.options.getString('input');
-
-    if (!interaction.memberPermissions === null)
-      await interaction.reply({
-        content: 'You do not have permission to use this command.',
-      });
-
-    if (usedCommandRecently.has(interaction.user.id)) {
-      await interaction.reply({
-        content:
-          'Please wait at least 15 seconds before using this command again.',
-      });
-    } else if (args !== null) {
-      const join = combine(args);
-      const path = `./${join}.png`;
-      await interaction.reply({ content: 'Fetching score...' });
-      let msg = '';
-      msg = await scrape(args);
-      if (msg === 'google') {
-        msg = await backupScrape(args);
-      }
-      if (msg !== 'not live') {
-        const file = new MessageAttachment(path);
-        const embeddedMessage = embed(msg, args);
-        await interaction.editReply({
-          content: null,
-          embeds: [embeddedMessage],
-          files: [file],
-        });
-        fs.unlink(path, (err) => {
-          if (err) throw err;
-          console.log('path was deleted');
-        });
-        usedCommandRecently.add(interaction.user.id);
-        setTimeout(() => {
-          usedCommandRecently.delete(interaction.user.id);
-        }, 15000);
-      } else {
-        const embeddedMessage = embed(msg, args);
-        await interaction.editReply({
-          embeds: [embeddedMessage],
-        });
-      }
-    } else {
-      await interaction.reply({
-        content: 'Please enter a team name.',
-      });
+    if (interaction.options.getSubcommand() === 'team') {
+      await team(interaction, usedCommandRecently);
+    } else if (interaction.options.getSubcommand() === 'google') {
+      await google(interaction, usedCommandRecently);
+    } else if (interaction.options.getSubcommand() === 'espn') {
+      await espn(interaction, usedCommandRecently);
     }
   },
 };
@@ -68,6 +23,32 @@ ScoreCommand.command.addSubcommand((subcommand) =>
   subcommand
     .setName('team')
     .setDescription('Searches for the current or past score of a given team.')
+    .addStringOption((option) =>
+      option
+        .setName('input')
+        .setDescription('The name of the team you would like to search.')
+        .setRequired(true)
+    )
+);
+ScoreCommand.command.addSubcommand((subcommand) =>
+  subcommand
+    .setName('google')
+    .setDescription(
+      'Google searches for the current or past score of a given team.'
+    )
+    .addStringOption((option) =>
+      option
+        .setName('input')
+        .setDescription('The name of the team you would like to search.')
+        .setRequired(true)
+    )
+);
+ScoreCommand.command.addSubcommand((subcommand) =>
+  subcommand
+    .setName('espn')
+    .setDescription(
+      'Searches for the current or past score of a given team on ESPN'
+    )
     .addStringOption((option) =>
       option
         .setName('input')

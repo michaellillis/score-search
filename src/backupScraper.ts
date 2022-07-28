@@ -1,5 +1,5 @@
 import * as puppeteer from 'puppeteer';
-import { combine, urlToString, waitTillHTMLRendered } from './utils';
+import { combine, urlToString, waitTillHTMLRendered, search } from './utils';
 export async function backupScrape(input: string) {
   let live = true;
   let playing = true;
@@ -15,23 +15,19 @@ export async function backupScrape(input: string) {
     height: 1080,
     deviceScaleFactor: 2,
   });
-  await page.goto('https://www.google.com/', {
-    waitUntil: 'domcontentloaded',
-  });
-  await page.waitForSelector('input[aria-label="Search"]', { visible: true });
-  await page.type('input[aria-label="Search"]', searchQuery);
-  await Promise.all([page.waitForNavigation(), page.keyboard.press('Enter')]);
+  await search(page, searchQuery);
   try {
     await page.waitForSelector(
       '#sports-app > div > div.abhAW.imso-hov.imso-mh.PZPZlf > div > div > div > div > div.imso_mh__tm-scr.imso_mh__mh-bd.imso-hov',
       {
         visible: true,
-        timeout: 10000,
+        timeout: 3000,
       }
     );
   } catch {
     playing = false;
     url = 'not live';
+    console.log('not live');
   }
   if (playing === true) {
     const [button] = await page.$x(
@@ -52,9 +48,21 @@ export async function backupScrape(input: string) {
       await page.screenshot({
         path: path,
       });
-    } else {
-      url = `The ${searchQuery}'s team isn't playing.`;
     }
+  } else {
+    const getFirst = await page.waitForSelector(
+      '#sports-app > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1) > td.liveresults-sports-immersive__match-tile.imso-hov.liveresults-sports-immersive__match-grid-bottom-border.liveresults-sports-immersive__match-grid-right-border',
+      {
+        visible: true,
+        timeout: 3000,
+      }
+    );
+    await getFirst?.click();
+    url = await urlToString(browser);
+    await waitTillHTMLRendered(page);
+    await page.screenshot({
+      path: path,
+    });
   }
   browser?.close();
   return url;

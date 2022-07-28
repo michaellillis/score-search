@@ -1,5 +1,5 @@
 import * as puppeteer from 'puppeteer';
-import { combine, urlToString, search, waitTillHTMLRendered } from './utils';
+import { combine, urlToString, search } from './utils';
 
 export async function scrape(input: string) {
   let browser: puppeteer.Browser;
