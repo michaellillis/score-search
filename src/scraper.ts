@@ -21,12 +21,10 @@ export async function scrape(input: string) {
 
   try {
     if (url.includes('team')) {
-      console.log('includes team');
       await Promise.all([page.click('.Schedule a'), page.waitForNavigation()]);
     }
-    const [boxScore] = await page.$x('//a[contains(., "Box Score")]');
+    const [boxScore] = await page.$x('//span[contains(., "Box Score")]');
     await boxScore.click();
-    await waitTillHTMLRendered(page);
     await page.addStyleTag({ path: stylesheet });
     url = await urlToString(browser);
     await page.screenshot({
