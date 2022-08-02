@@ -1,19 +1,19 @@
 import * as puppeteer from 'puppeteer';
-import { combine, urlToString, search } from './utils';
+import { combine, urlToString, search, waitTillHTMLRendered } from './utils';
 
 export async function scrape(input: string) {
   let browser: puppeteer.Browser;
   let url: string = '';
   const join = combine(input);
   const path = `./${join}.png`;
-  const stylesheet = 'src/style.css';
+  const nbaSheet = 'src/style.css';
+  const nflSheet = 'src/style2.css';
   const espn = `${input} espn`;
   browser = await puppeteer.launch();
   const [page] = await browser.pages();
   await page.setViewport({
     width: 1920,
     height: 1080,
-    deviceScaleFactor: 4,
   });
   await search(page, espn);
   await Promise.all([page.click('#search a'), page.waitForNavigation()]);
@@ -21,12 +21,18 @@ export async function scrape(input: string) {
 
   try {
     if (url.includes('team')) {
+      console.log('has team');
       await Promise.all([page.click('.Schedule a'), page.waitForNavigation()]);
     }
     const [boxScore] = await page.$x('//span[contains(., "Box Score")]');
     await boxScore.click();
-    await page.addStyleTag({ path: stylesheet });
     url = await urlToString(browser);
+    if (url.includes('nba')) {
+      await page.addStyleTag({ path: nbaSheet });
+    } else if (url.includes('nfl')) {
+      console.log('has nfl');
+      await waitTillHTMLRendered(page);
+    }
     await page.screenshot({
       path: path,
     });
