@@ -1,4 +1,3 @@
-import { SharedNameAndDescription } from '@discordjs/builders';
 import * as puppeteer from 'puppeteer';
 import { combine, urlToString, waitTillHTMLRendered, search } from './utils';
 export async function backupScrape(input: string) {

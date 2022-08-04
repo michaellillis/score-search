@@ -1,5 +1,5 @@
 import { CommandInteraction } from 'discord.js';
-import { scrape } from '../../scraper';
+import { scrape } from '../../scrape';
 import { backupScrape } from '../../backupScraper';
 import { embed, combine } from '../../utils';
 import { MessageAttachment } from 'discord.js';
