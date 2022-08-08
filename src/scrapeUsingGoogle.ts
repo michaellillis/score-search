@@ -1,6 +1,6 @@
 import * as puppeteer from 'puppeteer';
 import { combine, urlToString, waitTillHTMLRendered, search } from './utils';
-export async function backupScrape(input: string) {
+export async function scrapeUsingGoogle(input: string) {
   let live = true;
   let playing = true;
   let browser: puppeteer.Browser;

@@ -1,13 +1,13 @@
 import * as puppeteer from 'puppeteer';
 import { combine, urlToString, search, waitTillHTMLRendered } from './utils';
 
-export async function scrape(input: string) {
+export async function scrapeUsingESPN(input: string) {
   let browser: puppeteer.Browser;
   let url: string = '';
   const join = combine(input);
   const path = `./${join}.png`;
-  const nbaSheet = 'src/style.css';
-  const nflSheet = 'src/style2.css';
+  const nbaSheet = 'src/styles/espnbasketball.css';
+  const nflSheet = 'src/styles/espnfootball.css';
   const espn = `${input} espn`;
   browser = await puppeteer.launch();
   const [page] = await browser.pages();
@@ -31,6 +31,7 @@ export async function scrape(input: string) {
       await page.addStyleTag({ path: nbaSheet });
     } else if (url.includes('nfl')) {
       console.log('has nfl');
+      await page.addStyleTag({ path: nflSheet });
       await waitTillHTMLRendered(page);
     }
     await page.screenshot({

@@ -1,3 +1,1 @@
-export { team } from './team';
-export { google } from './google';
-export { espn } from './espn';
+export { site } from './site';

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { SlashCommand } from '../types';
-import { team, google, espn } from './sub-commands';
+import { site } from './sub-commands';
 
 const usedCommandRecently = new Set();
 
@@ -19,16 +19,14 @@ export const ScoreCommand: SlashCommand = {
       setTimeout(() => {
         usedCommandRecently.delete(interaction.user.id);
       }, 15000);
-      if (interaction.options.getSubcommand() === 'team') {
-        addCooldown;
-        await team(interaction);
-      } else if (interaction.options.getSubcommand() === 'google') {
-        addCooldown;
-        await google(interaction);
-      } else if (interaction.options.getSubcommand() === 'espn') {
-        addCooldown;
-        await espn(interaction);
-      }
+
+      let usesGoogle = false;
+      let usesTeamCommand = false;
+      usesGoogle = interaction.options.getSubcommand() === 'google';
+      usesTeamCommand = interaction.options.getSubcommand() === 'team';
+
+      await site(interaction, usesGoogle, usesTeamCommand);
+      addCooldown;
     }
   },
 };
