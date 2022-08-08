@@ -10,7 +10,7 @@ export async function scrapeUsingESPN(input: string) {
   const nflSheet = 'src/styles/espnfootball.css';
   const espn = `${input} espn`;
   browser = await puppeteer.launch();
-  const [page] = await browser.pages();
+  const page = await browser.newPage();
   await page.setViewport({
     width: 1920,
     height: 1080,
@@ -34,6 +34,9 @@ export async function scrapeUsingESPN(input: string) {
       await page.addStyleTag({ path: nflSheet });
       await waitTillHTMLRendered(page);
     }
+
+    await page.waitForSelector('.Boxscore', { visible: true });
+
     await page.screenshot({
       path: path,
     });
