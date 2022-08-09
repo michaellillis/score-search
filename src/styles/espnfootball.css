@@ -13,3 +13,7 @@
 .ad-slot {
   display: none;
 }
+
+section#main-container td {
+  font-size: 110% !important;
+}

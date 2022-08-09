@@ -1,5 +1,11 @@
 import * as puppeteer from 'puppeteer';
-import { combine, urlToString, search, waitTillHTMLRendered } from './utils';
+import {
+  combine,
+  urlToString,
+  search,
+  waitTillHTMLRendered,
+  timeout,
+} from './utils';
 
 export async function scrapeUsingESPN(input: string) {
   let browser: puppeteer.Browser;
@@ -29,17 +35,12 @@ export async function scrapeUsingESPN(input: string) {
     url = await urlToString(browser);
     if (url.includes('nba')) {
       await page.addStyleTag({ path: nbaSheet });
-    } else if (url.includes('nfl')) {
-      console.log('has nfl');
+      await page.waitForSelector('.Boxscore', { visible: true });
+    } else {
       await page.addStyleTag({ path: nflSheet });
-      await waitTillHTMLRendered(page);
+      await page.waitForSelector('.main-content', { visible: true });
     }
-
-    await page.waitForSelector('.Boxscore', { visible: true });
-
-    await page.screenshot({
-      path: path,
-    });
+    await page.screenshot({ path: path, captureBeyondViewport: false });
   } catch {
     url = 'google';
     console.log('ERROR: Could not locate game on ESPN.');
