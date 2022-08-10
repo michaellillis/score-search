@@ -1,9 +1,9 @@
 import { CommandInteraction } from 'discord.js';
-import { scrapeUsingGoogle } from '../../scrapeUsingGoogle';
+import { scrapeGoogle } from '../../scrapeGoogle';
 import { embed, combine } from '../../utils';
 import { MessageAttachment } from 'discord.js';
 import * as fs from 'fs';
-import { scrapeUsingESPN } from '../../scrapeUsingESPN';
+import { scrapeEspn } from '../../scrapeEspn';
 export async function site(
   interaction: CommandInteraction,
   usesGoogle: boolean,
@@ -16,10 +16,10 @@ export async function site(
     await interaction.reply({ content: 'Fetching score...' });
     let msg = '';
     if (usesTeamCommand === true || usesGoogle === false) {
-      msg = await scrapeUsingESPN(args);
+      msg = await scrapeEspn(args);
     }
     if (usesGoogle === true || msg === 'google') {
-      msg = await scrapeUsingGoogle(args);
+      msg = await scrapeGoogle(args);
     }
 
     if (msg !== 'not live') {
