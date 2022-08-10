@@ -9,8 +9,8 @@ export async function scrapeEspn(input: string) {
   const defaultStyles = 'src/styles/espn/default-layout.css';
   const alternateStyles = 'src/styles/espn/alternate-layout.css';
   const espn = `${input} espn`;
-  browser = await puppeteer.launch({ headless: false });
-  const page = await browser.newPage();
+  browser = await puppeteer.launch();
+  const [page] = await browser.pages();
   await page.setViewport({
     width: 1920,
     height: 1080,
