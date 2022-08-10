@@ -50,23 +50,24 @@ export async function scrapeGoogle(input: string) {
       });
     }
   } else {
-    const getFirst = await page.waitForSelector(
-      '#sports-app > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1) > td.liveresults-sports-immersive__match-tile.imso-hov.liveresults-sports-immersive__match-grid-bottom-border.liveresults-sports-immersive__match-grid-right-border',
-      {
-        visible: true,
-        timeout: 3000,
+    try {
+      const getFirst = await page.waitForSelector(
+        '#sports-app > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1) > td.liveresults-sports-immersive__match-tile.imso-hov.liveresults-sports-immersive__match-grid-bottom-border.liveresults-sports-immersive__match-grid-right-border',
+        {
+          visible: true,
+          timeout: 3000,
+        }
+      );
+      if (getFirst !== null) {
+        url = await urlToString(browser);
+        await waitTillHTMLRendered(page);
+        await page.screenshot({
+          path: path,
+        });
       }
-    );
-    await getFirst?.click();
-    url = await urlToString(browser);
-    await waitTillHTMLRendered(page);
-    await page.screenshot({
-      path: path,
-    });
-    const getSecond = await page.waitForSelector(
-      '#liveresults-sports-immersive__match-fullpage > div > div:nth-child(2) > div.nGzje > div:nth-child(3) > div > div.tb_h.ie7Asb.Hr51pb.imso-medium-font.TbbqEc.imso-ani.YPgUJe.B27Eaf > div > ol > li:nth-child(2)'
-    );
-    await getSecond?.click();
+    } catch {
+      url = 'not live';
+    }
   }
   browser?.close();
   return url;
