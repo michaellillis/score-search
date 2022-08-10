@@ -33,7 +33,9 @@ export async function scrapeUsingESPN(input: string) {
     const [boxScore] = await page.$x('//span[contains(., "Box Score")]');
     await boxScore.click();
     url = await urlToString(browser);
-    if (url.includes('nba')) {
+
+    // ESPN has seperate layout for NBA and NHL so it must use different CSS/selector verification
+    if (url.includes('nba') || url.includes('nhl')) {
       await page.addStyleTag({ path: nbaSheet });
       await page.waitForSelector('.Boxscore', { visible: true });
     } else {

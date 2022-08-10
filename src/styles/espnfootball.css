@@ -1,19 +1,31 @@
-#gamepackage-news {
-  display: none;
+.ad-slot,
+.ad-banner-wrapper,
+.tertiary-nav-container,
+#gamepackage-news,
+.module.mod-game-series,
+article.sub-module.sub-module-news {
+  display: none !important;
 }
 
-.tertiary-nav-container {
-  display: none;
-}
-
-.ad-banner-wrapper {
-  display: none;
-}
-
-.ad-slot {
-  display: none;
-}
-
+section#main-container th,
 section#main-container td {
   font-size: 110% !important;
+}
+
+.layout-full .col-b,
+.layout-bc .col-b {
+  width: 80% !important;
+}
+
+#global-viewport #pane-main #main-container {
+  justify-content: normal;
+}
+
+.main-content.null,
+div#gamepackage-wrap,
+div#gamepackage-column-wrap,
+div#gamepackage-content-wrap,
+div#gamepackage-content-wrap,
+.main-content.null {
+  width: 100%;
 }

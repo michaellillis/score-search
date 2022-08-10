@@ -1,5 +1,6 @@
 /* BASKETBALL PAGE CHANGES */
-div.bp-desktopLGPlus .page-container {
+div.bp-desktopLGPlus .page-container,
+.Wrapper.Card__Content {
   width: 100%;
 }
 
@@ -9,22 +10,11 @@ div.Wrapper {
   margin: 0% 1% 0% 1%;
 }
 
+.PageLayout__RightAside,
+div.bp-desktopLGPlus .sponsored-content,
 div.bp-desktopLGPlus .Ad--banner {
   display: none;
 }
-
-div.bp-desktopLGPlus .sponsored-content {
-  display: none;
-}
-
-.PageLayout__RightAside {
-  display: none;
-}
-
-.Wrapper.Card__Content {
-  width: 100%;
-}
-
 .Table__TD {
-  font-size: 20px;
+  font-size: 18px;
 }
