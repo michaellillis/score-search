@@ -20,10 +20,8 @@ export const ScoreCommand: SlashCommand = {
         usedCommandRecently.delete(interaction.user.id);
       }, 15000);
 
-      let usesGoogle = false;
-      let usesTeamCommand = false;
-      usesGoogle = interaction.options.getSubcommand() === 'google';
-      usesTeamCommand = interaction.options.getSubcommand() === 'team';
+      let usesGoogle = interaction.options.getSubcommand() === 'google';
+      let usesTeamCommand = interaction.options.getSubcommand() === 'team';
 
       await site(interaction, usesGoogle, usesTeamCommand);
       addCooldown;

@@ -25,7 +25,7 @@ export function embed(url: string, input: string): MessageEmbed {
     return embed;
   } else {
     const embed = new MessageEmbed()
-      .setTitle(`Game was not found`)
+      .setTitle('Game was not found')
       .setColor('#0099ff')
       .setTimestamp();
     return embed;
