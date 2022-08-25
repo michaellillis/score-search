@@ -1,5 +1,5 @@
 import { Page } from 'puppeteer';
-export const waitTillHTMLRendered = async (page: Page, timeout = 3000) => {
+export const waitUntillHTMLRendered = async (page: Page, timeout = 3000) => {
   const checkDurationMsecs = 1000;
   const maxChecks = timeout / checkDurationMsecs;
   let lastHTMLSize = 0;

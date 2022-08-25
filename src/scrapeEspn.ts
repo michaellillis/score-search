@@ -1,7 +1,8 @@
 import * as puppeteer from 'puppeteer';
+import { scrapeGoogle } from './scrapeGoogle';
 import { combine, urlToString, search } from './utils';
 
-export async function scrapeEspn(input: string) {
+export async function scrapeEspn(input: string, triedGoogle = false) {
   let browser: puppeteer.Browser;
   let url: string = '';
   const join = combine(input);
@@ -9,7 +10,7 @@ export async function scrapeEspn(input: string) {
   const defaultStyles = 'src/styles/espn/default-layout.css';
   const alternateStyles = 'src/styles/espn/alternate-layout.css';
   const espn = `${input} espn`;
-  browser = await puppeteer.launch();
+  browser = await puppeteer.launch({ headless: true });
   const [page] = await browser.pages();
   await page.setViewport({
     width: 1920,
@@ -22,7 +23,10 @@ export async function scrapeEspn(input: string) {
   try {
     if (url.includes('team')) {
       console.log('has team');
-      await Promise.all([page.click('.Schedule a'), page.waitForNavigation()]);
+      await Promise.all([
+        page.click('.Schedule .Schedule__Score'),
+        page.waitForNavigation(),
+      ]);
     }
     const [boxScore] = await page.$x('//span[contains(., "Box Score")]');
     await boxScore.click();
@@ -37,10 +41,18 @@ export async function scrapeEspn(input: string) {
       await page.waitForSelector('.main-content', { visible: true });
     }
     await page.screenshot({ path: path, captureBeyondViewport: false });
+    browser?.close();
+    return url;
+
+    //If game fails, run ESPN method if that hasn't been done yet
   } catch {
-    url = 'google';
-    console.log('ERROR: Could not locate game on ESPN.');
+    url = 'ERROR: Failed to scrape from ESPN.';
+    console.log(url);
+    browser?.close();
+
+    if (!triedGoogle) {
+      url = await scrapeGoogle(input);
+    }
+    return url;
   }
-  browser?.close();
-  return url;
 }

@@ -1,14 +1,13 @@
 import * as puppeteer from 'puppeteer';
-import { combine, urlToString, waitTillHTMLRendered, search } from './utils';
-export async function scrapeGoogle(input: string) {
-  let live = true;
-  let playing = true;
+import { scrapeEspn } from './scrapeEspn';
+import { combine, urlToString, search } from './utils';
+export async function scrapeGoogle(input: string, triedESPN = false) {
   let browser: puppeteer.Browser;
   let url: string = '';
   const join = combine(input);
   const path = `./${join}.png`;
   const searchQuery = input;
-  browser = await puppeteer.launch();
+  browser = await puppeteer.launch({ headless: false });
   const [page] = await browser.pages();
   await page.setViewport({
     width: 700,
@@ -16,59 +15,42 @@ export async function scrapeGoogle(input: string) {
     deviceScaleFactor: 2,
   });
   await search(page, searchQuery);
+  // Try to find sports game(s) relating to the search.
   try {
-    await page.waitForSelector(
-      '#sports-app > div > div.abhAW.imso-hov.imso-mh.PZPZlf > div > div > div > div > div.imso_mh__tm-scr.imso_mh__mh-bd.imso-hov',
-      {
-        visible: true,
-        timeout: 3000,
-      }
-    );
-  } catch {
-    playing = false;
-    url = 'not live';
-    console.log('not live');
-  }
-  if (playing === true) {
-    const [button] = await page.$x(
-      '/html/body/div[7]/div/div[10]/div[1]/div[2]/div[2]/div/div/div[1]/block-component/div/div[1]/div/div/div/div[1]/div/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[1]/div[2]/div[1]/div/div[1]/div[2]/div/span'
-    );
-    if (button) {
-      await button.click();
-      try {
-        await waitTillHTMLRendered(page);
-      } catch {
-        console.log('Not live');
-        live = false;
-      }
-      if (live === false) {
-        await waitTillHTMLRendered(page);
-      }
-      url = await urlToString(browser);
+    await page.waitForSelector('#sports-app', {
+      visible: true,
+      timeout: 3000,
+    });
+    // When the user doesn't include "vs", return the latest game
+    if (!input.toLowerCase().includes(' vs ')) {
+      await Promise.all([
+        page.click('#sports-app table table'),
+        page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 3000 }),
+      ]);
       await page.screenshot({
         path: path,
       });
-    }
-  } else {
-    try {
-      const getFirst = await page.waitForSelector(
-        '#sports-app > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1) > td.liveresults-sports-immersive__match-tile.imso-hov.liveresults-sports-immersive__match-grid-bottom-border.liveresults-sports-immersive__match-grid-right-border',
-        {
-          visible: true,
-          timeout: 3000,
-        }
-      );
-      if (getFirst !== null) {
-        url = await urlToString(browser);
-        await waitTillHTMLRendered(page);
-        await page.screenshot({
-          path: path,
-        });
+      // When the user searches with "vs", return an entire container of that mathchup
+    } else {
+      const element = await page.$('#sports-app');
+
+      if (element !== null) {
+        await element.screenshot({ path: path });
       }
-    } catch {
-      url = 'not live';
     }
+    url = await urlToString(browser);
+    browser?.close();
+    return url;
+
+    //If game fails, run ESPN method if that hasn't been done yet
+  } catch {
+    url = 'ERROR: Failed to scrape from Google.';
+    console.log(url);
+    browser?.close();
+
+    if (!triedESPN) {
+      url = await scrapeEspn(input);
+    }
+    return url;
   }
-  browser?.close();
-  return url;
 }

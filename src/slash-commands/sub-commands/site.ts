@@ -15,6 +15,7 @@ export async function site(
     const path = `./${join}.png`;
     await interaction.reply({ content: 'Fetching score...' });
     let msg = '';
+    let foundGame = false;
     if (usesTeamCommand === true || usesGoogle === false) {
       msg = await scrapeEspn(args);
     }
@@ -22,7 +23,7 @@ export async function site(
       msg = await scrapeGoogle(args);
     }
 
-    if (msg !== 'not live') {
+    if (!msg.includes('ERROR')) {
       const file = new MessageAttachment(path);
       const embeddedMessage = embed(msg, args);
       await interaction.editReply({
