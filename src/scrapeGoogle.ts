@@ -1,9 +1,13 @@
 import * as puppeteer from 'puppeteer';
 import { scrapeEspn } from './scrapeEspn';
 import { combine, urlToString, search } from './utils';
-export async function scrapeGoogle(input: string, triedESPN = false) {
+export async function scrapeGoogle(
+  input: string,
+  triedESPN = false
+): Promise<[string, boolean]> {
   let browser: puppeteer.Browser;
   let url: string = '';
+  let isValidGame = true;
   const join = combine(input);
   const path = `./${join}.png`;
   const searchQuery = input;
@@ -24,7 +28,7 @@ export async function scrapeGoogle(input: string, triedESPN = false) {
     // When the user doesn't include "vs", return the latest game
     if (!input.toLowerCase().includes(' vs ')) {
       await Promise.all([
-        page.click('#sports-app table table'),
+        page.click('#sports-app .imso-hov'),
         page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 3000 }),
       ]);
       await page.screenshot({
@@ -40,17 +44,18 @@ export async function scrapeGoogle(input: string, triedESPN = false) {
     }
     url = await urlToString(browser);
     browser?.close();
-    return url;
+    return [url, isValidGame];
 
-    //If game fails, run ESPN method if that hasn't been done yet
+    //If game can't be found, run ESPN method if that hasn't been done yet
   } catch {
-    url = 'ERROR: Failed to scrape from Google.';
-    console.log(url);
+    url = 'ERROR: Game could not be found on Google.';
+    isValidGame = false;
+    console.log(url, isValidGame);
     browser?.close();
 
     if (!triedESPN) {
-      url = await scrapeEspn(input);
+      [url, isValidGame] = await scrapeEspn(input, true);
     }
-    return url;
+    return [url, isValidGame];
   }
 }

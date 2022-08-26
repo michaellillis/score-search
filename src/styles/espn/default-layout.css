@@ -3,6 +3,8 @@
 .ad-banner-wrapper,
 .tertiary-nav-container,
 #gamepackage-news,
+#gamepackage-cliplist,
+#gamepackage-ad,
 .module.mod-game-series,
 article.sub-module.sub-module-news {
   display: none !important;

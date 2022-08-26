@@ -15,17 +15,17 @@ export async function site(
     const path = `./${join}.png`;
     await interaction.reply({ content: 'Fetching score...' });
     let msg = '';
-    let foundGame = false;
-    if (usesTeamCommand === true || usesGoogle === false) {
-      msg = await scrapeEspn(args);
+    let isValidGame = true;
+    if (usesTeamCommand || !usesGoogle) {
+      [msg, isValidGame] = await scrapeEspn(args);
     }
-    if (usesGoogle === true || msg === 'google') {
-      msg = await scrapeGoogle(args);
+    if (usesGoogle || msg === 'google') {
+      [msg, isValidGame] = await scrapeGoogle(args);
     }
 
-    if (!msg.includes('ERROR')) {
+    if (isValidGame === true) {
       const file = new MessageAttachment(path);
-      const embeddedMessage = embed(msg, args);
+      const embeddedMessage = embed(msg, args, isValidGame);
       await interaction.editReply({
         content: null,
         embeds: [embeddedMessage],
@@ -33,10 +33,15 @@ export async function site(
       });
       fs.unlink(path, (err) => {
         if (err) throw err;
-        console.log('path was deleted');
+        console.log('path was deleted.');
       });
     } else {
-      const embeddedMessage = embed(msg, args);
+      const embeddedMessage = embed(
+        'Could not find game on ESPN or Google.',
+        args,
+        isValidGame
+      );
+
       await interaction.editReply({
         embeds: [embeddedMessage],
       });

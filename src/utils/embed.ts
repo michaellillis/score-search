@@ -1,7 +1,11 @@
 import { MessageEmbed } from 'discord.js';
 import { combine } from './joinWords';
-export function embed(url: string, input: string): MessageEmbed {
-  if (url !== 'not live') {
+export function embed(
+  url: string,
+  input: string,
+  isValidGame: boolean
+): MessageEmbed {
+  if (isValidGame) {
     const join = combine(input);
     const path = `attachment://${join}.png`;
     console.log(path);
@@ -25,7 +29,7 @@ export function embed(url: string, input: string): MessageEmbed {
     return embed;
   } else {
     const embed = new MessageEmbed()
-      .setTitle('Game was not found')
+      .setTitle(`Could not find "${input}" Game on ESPN or Google`)
       .setColor('#0099ff')
       .setTimestamp();
     return embed;
