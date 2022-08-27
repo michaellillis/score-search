@@ -1,6 +1,7 @@
 import * as puppeteer from 'puppeteer';
 import { scrapeEspn } from './scrapeEspn';
 import { combine, urlToString, search } from './utils';
+import { generateBrowserSettings } from './utils/generateBrowserSettings';
 export async function scrapeGoogle(
   input: string,
   triedESPN = false
@@ -11,7 +12,11 @@ export async function scrapeGoogle(
   const join = combine(input);
   const path = `./${join}.png`;
   const searchQuery = input;
-  browser = await puppeteer.launch({ headless: false });
+  let browserSettings: string[] = generateBrowserSettings();
+  browser = await puppeteer.launch({
+    headless: false,
+    args: browserSettings,
+  });
   const [page] = await browser.pages();
   await page.setViewport({
     width: 700,

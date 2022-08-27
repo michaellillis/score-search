@@ -6,8 +6,7 @@ import * as fs from 'fs';
 import { scrapeEspn } from '../../scrapeEspn';
 export async function site(
   interaction: CommandInteraction,
-  usesGoogle: boolean,
-  usesTeamCommand: boolean
+  usesGoogle: boolean
 ) {
   const args = interaction.options.getString('input');
   if (args !== null) {
@@ -16,10 +15,9 @@ export async function site(
     await interaction.reply({ content: 'Fetching score...' });
     let msg = '';
     let isValidGame = true;
-    if (usesTeamCommand || !usesGoogle) {
+    if (!usesGoogle) {
       [msg, isValidGame] = await scrapeEspn(args);
-    }
-    if (usesGoogle || msg === 'google') {
+    } else {
       [msg, isValidGame] = await scrapeGoogle(args);
     }
 
