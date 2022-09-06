@@ -44,7 +44,7 @@ Run the following commands in terminal/command prompt:
 
 > [Discord.JS - Discord API](https://nodejs.org/en/)
 
-> [Puppeteer - Discord API](https://pptr.dev/)
+> [Puppeteer - Web API](https://pptr.dev/)
 
 > [Discord - VoIP and instant messaging platform](https://discord.com/)
 
