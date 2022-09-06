@@ -30,9 +30,9 @@ export async function scrapeEspn(
     });
     await search(page, espn);
 
-    const [boxScore] = await page.$x('//a[contains(., "Box Score")]');
+    const [boxScoreLink] = await page.$x('//a[contains(., "Box Score")]');
 
-    await boxScore.click();
+    await boxScoreLink.click();
     url = await urlToString(browser);
 
     // ESPN has seperate layout for NBA and NHL so it must use alternate CSS/selector verification
@@ -43,7 +43,7 @@ export async function scrapeEspn(
     }
     const loaded = page.waitForNavigation({
       waitUntil: 'load',
-      timeout: 4000,
+      timeout: 5000,
     });
 
     await loaded;
