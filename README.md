@@ -3,7 +3,7 @@
 > Score Search is a [Discord](https://discord.com/) Bot created by [@TylerJenningsW](https://github.com/TylerJenningsW) and [@MichaelLillis](https://github.com/MichaelLillis) using [TypeScript](https://www.typescriptlang.org/), [Puppeteer](https://pptr.dev/) for web scraping, and [Discord.JS](https://discord.js.org/#/) as a Discord API wrapper.
 #
 
-<img src="https://user-images.githubusercontent.com/36655595/188735556-6d2c2039-dc95-44f1-a386-7308379a95f1.jpg" img align="right" width=45%>
+<img src="https://user-images.githubusercontent.com/36655595/188735556-6d2c2039-dc95-44f1-a386-7308379a95f1.jpg" img align="right" width=45% margin-top=10%>
 
 ## General Information ℹ️
 The Score Search Discord bot allows you and your friends to look at live or past sports scores. By using the commands given below, the bot automatically goes to the chosen site (ESPN or Google), searches the game or team you've chosen, and screenshots the game and stats for the whole discord to see. The perfect tool for trash talking on a Football Sunday ;)
