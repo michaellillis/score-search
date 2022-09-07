@@ -36,9 +36,15 @@ Run the following commands in terminal/command prompt:
 • We adjusted the CSS before the screenshot takes place to allow for clear and relevant information/statistics to display.   
 • Speeds can range from 2-4 seconds (command to bot response)!
 
-## Screen Shots 📷
+## Screen Shots/Examples 📷
+#### '/score google [phillies]' - As an example of wanting to see a live/most recent game the Phillies played!
+![0U2ztME](https://user-images.githubusercontent.com/36655595/188792770-9157b5d1-2a1b-4d23-bbf4-b9552afb96f9.png)
 
+#### /score google [eagles vs cowboys 2017] - As an example of wanting to see all games the Eagles/Cowboys played against each other in 2017!
+![TOk5bNh](https://user-images.githubusercontent.com/36655595/188792405-b684e3bf-4d94-4553-b731-ccfd78a242fe.png)
 
+#### /score espn [Buccaneers] - As an example of wanting to see a more detailed view of a game (better for box score stats)!
+![TOk5bNh](https://user-images.githubusercontent.com/36655595/188792405-b684e3bf-4d94-4553-b731-ccfd78a242fe.png)
 
 ## Links 🔗
 
