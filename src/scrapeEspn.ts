@@ -41,12 +41,10 @@ export async function scrapeEspn(
     } else {
       await page.addStyleTag({ path: defaultStyles });
     }
-    const loaded = page.waitForNavigation({
+    await page.waitForNavigation({
       waitUntil: 'load',
-      timeout: 5000,
+      timeout: 8000,
     });
-
-    await loaded;
 
     await page.screenshot({ path: path, captureBeyondViewport: false });
     browser?.close();

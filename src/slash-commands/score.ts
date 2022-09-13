@@ -7,7 +7,7 @@ const usedCommandRecently = new Set();
 export const ScoreCommand: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('score')
-    .setDescription('Returns a game of your choice!'),
+    .setDescription('Returns the box score of a chosen team/game.'),
   async run(interaction) {
     if (usedCommandRecently.has(interaction.user.id)) {
       await interaction.reply({
@@ -36,7 +36,9 @@ ScoreCommand.command.addSubcommand((subcommand) =>
     .addStringOption((option) =>
       option
         .setName('input')
-        .setDescription('The name of the team you would like to search.')
+        .setDescription(
+          'The name of the team/matchup you would like to search.'
+        )
         .setRequired(true)
     )
 );
@@ -44,12 +46,14 @@ ScoreCommand.command.addSubcommand((subcommand) =>
   subcommand
     .setName('espn')
     .setDescription(
-      'Searches for the current or past score of a given team on ESPN.'
+      'Searches for the live or past score of a given team on ESPN.'
     )
     .addStringOption((option) =>
       option
         .setName('input')
-        .setDescription('The name of the team you would like to search.')
+        .setDescription(
+          'The name of the team/matchup you would like to search.'
+        )
         .setRequired(true)
     )
 );
