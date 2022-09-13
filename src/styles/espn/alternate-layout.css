@@ -1,0 +1,20 @@
+/* Alternate Layout for NBA and NHL */
+div.bp-desktopLGPlus .page-container,
+.Wrapper.Card__Content {
+  width: 100%;
+}
+
+div.Wrapper {
+  width: 48%;
+  display: inline-table;
+  margin: 0% 1% 0% 1%;
+}
+
+.PageLayout__RightAside,
+div.bp-desktopLGPlus .sponsored-content,
+div.bp-desktopLGPlus .Ad--banner {
+  display: none;
+}
+.Table__TD {
+  font-size: 18px;
+}
