@@ -12,10 +12,10 @@ export async function scrapeGoogle(
   const join = combine(input);
   const path = `./${join}.png`;
   const searchQuery = input;
-  //let browserSettings: string[] = generateBrowserSettings();
+  let browserSettings: string[] = generateBrowserSettings();
   browser = await puppeteer.launch({
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    args: browserSettings,
   });
   const [page] = await browser.pages();
   await page.setViewport({
