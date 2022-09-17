@@ -10,7 +10,7 @@ export async function scrapeEspn(
   let browser: puppeteer.Browser;
   //let browserSettings: string[] = generateBrowserSettings();
   browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
 
@@ -32,8 +32,6 @@ export async function scrapeEspn(
       height: 1080,
     });
     await search(page, espn);
-
-    const is_disabled = (await page.$x('//button[@disabled]')).length !== 0;
 
     const [boxScoreLink]: any = await page.$x('//a[contains(., "Box Score")]');
 
