@@ -8,8 +8,8 @@ export async function scrapeEspn(
   triedGoogle = false
 ): Promise<[string, boolean]> {
   let browser: puppeteer.Browser;
-  let browserSettings: string[] = generateBrowserSettings();
-  browser = await puppeteer.launch({ headless: false, args: browserSettings });
+  //let browserSettings: string[] = generateBrowserSettings();
+  browser = await puppeteer.launch({ headless: false });
 
   let url: string = '';
   let isValidGame = true;
