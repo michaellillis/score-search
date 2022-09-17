@@ -14,7 +14,7 @@ export async function scrapeGoogle(
   const searchQuery = input;
   let browserSettings: string[] = generateBrowserSettings();
   browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     args: browserSettings,
   });
   const [page] = await browser.pages();

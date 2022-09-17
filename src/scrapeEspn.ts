@@ -10,7 +10,7 @@ export async function scrapeEspn(
   let browser: puppeteer.Browser;
   let browserSettings: string[] = generateBrowserSettings();
   browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     args: browserSettings,
   });
 
