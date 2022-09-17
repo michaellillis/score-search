@@ -15,6 +15,7 @@ export async function scrapeGoogle(
   //let browserSettings: string[] = generateBrowserSettings();
   browser = await puppeteer.launch({
     headless: false,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   const [page] = await browser.pages();
   await page.setViewport({

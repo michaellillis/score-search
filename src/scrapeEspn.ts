@@ -9,7 +9,10 @@ export async function scrapeEspn(
 ): Promise<[string, boolean]> {
   let browser: puppeteer.Browser;
   //let browserSettings: string[] = generateBrowserSettings();
-  browser = await puppeteer.launch({ headless: false });
+  browser = await puppeteer.launch({
+    headless: false,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
 
   let url: string = '';
   let isValidGame = true;
