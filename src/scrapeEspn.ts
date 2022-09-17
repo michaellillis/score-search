@@ -42,6 +42,10 @@ export async function scrapeEspn(
     if (url.includes('nba') || url.includes('nhl')) {
       await page.addStyleTag({ path: alternateStyles });
     } else {
+      await page.waitForNavigation({
+        waitUntil: 'load',
+        timeout: 8000,
+      });
       await page.addStyleTag({ path: defaultStyles });
     }
     await page.waitForNavigation({
