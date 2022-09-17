@@ -18,8 +18,8 @@ export async function scrapeEspn(
   let isValidGame = true;
   const join = combine(input);
   const path = `./${join}.png`;
-  const defaultStyles = 'src/styles/espn/default-layout.css';
-  const alternateStyles = 'src/styles/espn/alternate-layout.css';
+  const defaultStyles = 'styles/espn/default-layout.css';
+  const alternateStyles = 'styles/espn/alternate-layout.css';
 
   let date = new Date();
   date.setHours(date.getHours() - 10);
