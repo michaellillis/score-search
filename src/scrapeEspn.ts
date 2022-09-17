@@ -33,7 +33,9 @@ export async function scrapeEspn(
     });
     await search(page, espn);
 
-    const [boxScoreLink] = await page.$x('//a[contains(., "Box Score")]');
+    const is_disabled = (await page.$x('//button[@disabled]')).length !== 0;
+
+    const [boxScoreLink]: any = await page.$x('//a[contains(., "Box Score")]');
 
     await boxScoreLink.click();
     url = await urlToString(browser);
