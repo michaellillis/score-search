@@ -24,7 +24,7 @@ export async function site(
     if (isValidGame === true) {
       const file = new MessageAttachment(path);
       const embeddedMessage = embed(msg, args, isValidGame);
-      await interaction.editReply({
+      await interaction.followUp({
         content: null,
         embeds: [embeddedMessage],
         files: [file],
@@ -40,7 +40,7 @@ export async function site(
         isValidGame
       );
 
-      await interaction.editReply({
+      await interaction.followUp({
         embeds: [embeddedMessage],
       });
     }

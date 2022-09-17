@@ -18,8 +18,8 @@ export async function scrapeEspn(
   let isValidGame = true;
   const join = combine(input);
   const path = `./${join}.png`;
-  const defaultStyles = 'styles/espn/default-layout.css';
-  const alternateStyles = 'styles/espn/alternate-layout.css';
+  const defaultStyles = 'src/styles/espn/default-layout.css';
+  const alternateStyles = 'src/styles/espn/alternate-layout.css';
 
   let date = new Date();
   date.setHours(date.getHours() - 10);
@@ -34,20 +34,17 @@ export async function scrapeEspn(
     await search(page, espn);
 
     const [boxScoreLink]: any = await page.$x('//a[contains(., "Box Score")]');
-
-    await boxScoreLink.click();
+    await Promise.all([page.waitForNavigation(), boxScoreLink.click()]);
     url = await urlToString(browser);
-
+    console.log(url);
     // ESPN has seperate layout for NBA and NHL so it must use alternate CSS/selector verification
     if (url.includes('nba') || url.includes('nhl')) {
+      console.log('used sheet 1');
       await page.addStyleTag({ path: alternateStyles });
     } else {
+      console.log('used sheet 2');
       await page.addStyleTag({ path: defaultStyles });
     }
-    await page.waitForNavigation({
-      waitUntil: 'load',
-      timeout: 8000,
-    });
 
     await page.screenshot({ path: path, captureBeyondViewport: false });
     browser?.close();
