@@ -1,0 +1,34 @@
+/* Default layout for all sports besides the NBA and NHL */
+.ad-slot,
+.ad-banner-wrapper,
+.tertiary-nav-container,
+#gamepackage-news,
+#gamepackage-cliplist,
+#gamepackage-ad,
+.module.mod-game-series,
+article.sub-module.sub-module-news {
+  display: none !important;
+}
+
+section#main-container th,
+section#main-container td {
+  font-size: 110% !important;
+}
+
+.layout-full .col-b,
+.layout-bc .col-b {
+  width: 80% !important;
+}
+
+#global-viewport #pane-main #main-container {
+  justify-content: normal;
+}
+
+.main-content.null,
+div#gamepackage-wrap,
+div#gamepackage-column-wrap,
+div#gamepackage-content-wrap,
+div#gamepackage-content-wrap,
+.main-content.null {
+  width: 100%;
+}
