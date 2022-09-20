@@ -9,7 +9,10 @@ export async function scrapeEspn(
 ): Promise<[string, boolean]> {
   let browser: puppeteer.Browser;
   let browserSettings: string[] = generateBrowserSettings();
-  browser = await puppeteer.launch({ headless: false, args: browserSettings });
+  browser = await puppeteer.launch({
+    headless: false,
+    args: browserSettings,
+  });
 
   let url: string = '';
   let isValidGame = true;
@@ -30,21 +33,18 @@ export async function scrapeEspn(
     });
     await search(page, espn);
 
-    const [boxScoreLink] = await page.$x('//a[contains(., "Box Score")]');
-
-    await boxScoreLink.click();
+    const [boxScoreLink]: any = await page.$x('//a[contains(., "Box Score")]');
+    await Promise.all([page.waitForNavigation(), boxScoreLink.click()]);
     url = await urlToString(browser);
-
+    console.log(url);
     // ESPN has seperate layout for NBA and NHL so it must use alternate CSS/selector verification
     if (url.includes('nba') || url.includes('nhl')) {
+      console.log('used sheet 1');
       await page.addStyleTag({ path: alternateStyles });
     } else {
+      console.log('used sheet 2');
       await page.addStyleTag({ path: defaultStyles });
     }
-    await page.waitForNavigation({
-      waitUntil: 'load',
-      timeout: 8000,
-    });
 
     await page.screenshot({ path: path, captureBeyondViewport: false });
     browser?.close();

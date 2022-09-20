@@ -1,9 +1,12 @@
 {
   "name": "sportsbot",
-  "version": "1.0.0",
+  "version": "5.7.1",
   "main": "index.js",
   "author": "TylerJenningsW <tylerjennings2@outlook.com>",
   "license": "MIT",
+  "engines": {
+    "node": "16.15.1"
+  },
   "scripts": {
     "lint": "eslint src --ext .ts --fix",
     "format": "prettier --write src/**/*.ts",

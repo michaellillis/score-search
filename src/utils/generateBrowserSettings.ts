@@ -36,5 +36,6 @@ export function generateBrowserSettings() {
     '--use-mock-keychain',
     '--proxy-server="direct://"',
     '--proxy-bypass-list=*',
+    '--headless',
   ];
 }

@@ -57,3 +57,4 @@ ScoreCommand.command.addSubcommand((subcommand) =>
         .setRequired(true)
     )
 );
+//
