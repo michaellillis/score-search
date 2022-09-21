@@ -31,6 +31,7 @@ export async function scrapeEspn(
       width: 1920,
       height: 1080,
     });
+    await page.setGeolocation({ latitude: 89.3985, longitude: 40.6331 });
     await search(page, espn);
 
     const [boxScoreLink]: any = await page.$x('//a[contains(., "Box Score")]');
