@@ -23,8 +23,7 @@ export async function scrapeGoogle(
     height: 1080,
     deviceScaleFactor: 2,
   });
-  await page.setGeolocation({ latitude: 89.3985, longitude: 40.6331 });
-  await search(page, searchQuery);
+  await search(browser, page, searchQuery);
   // Try to find sports game(s) relating to the search.
   try {
     await page.waitForSelector('#sports-app', {
