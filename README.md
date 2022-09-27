@@ -56,9 +56,9 @@ jontewks/puppeteer
 • Since our web scraper searches through Google, you can make the Search as specific as you'd like it to be!  
 • If your search fails with the site you've chosen (ESPN or Google), it will attempt the search on the opposing site as well.  
 • We adjusted the CSS before the screenshot takes place to allow for clear and relevant information/statistics to display.  
-• Speeds can range from 2-4 seconds (command to bot response)!
+• Speeds can range from 3-5 seconds (command to bot response)!
 
-## Screen Shots/Examples 📷
+## Screenshots/Examples 📷
 
 #### '/score google [phillies]' - As an example of wanting to see a live/most recent game the Phillies played!
 
