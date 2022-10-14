@@ -31,7 +31,7 @@ export async function scrapeEspn(
       width: 1920,
       height: 1080,
     });
-    await search(page, espn);
+    await search(browser, page, espn);
 
     const [boxScoreLink]: any = await page.$x('//a[contains(., "Box Score")]');
     await Promise.all([page.waitForNavigation(), boxScoreLink.click()]);

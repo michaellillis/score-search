@@ -23,7 +23,7 @@ export async function scrapeGoogle(
     height: 1080,
     deviceScaleFactor: 2,
   });
-  await search(page, searchQuery);
+  await search(browser, page, searchQuery);
   // Try to find sports game(s) relating to the search.
   try {
     await page.waitForSelector('#sports-app', {
