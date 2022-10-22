@@ -2,6 +2,7 @@
 
 > Score Search is a [Discord](https://discord.com/) Bot created by [@TylerJenningsW](https://github.com/TylerJenningsW) and [@MichaelLillis](https://github.com/MichaelLillis) using [TypeScript](https://www.typescriptlang.org/), [Puppeteer](https://pptr.dev/) for web scraping, and [Discord.JS](https://discord.js.org/#/) as a Discord API wrapper.
 
+>*NOTE:* This project is meant to be a learning experience, as both authors had limited knowledge of TypeScript and Puppeteer going into the project.
 #
 
 <img src="https://user-images.githubusercontent.com/36655595/188735556-6d2c2039-dc95-44f1-a386-7308379a95f1.jpg" img align="right" width=45%>
