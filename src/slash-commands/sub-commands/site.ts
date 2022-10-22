@@ -15,12 +15,14 @@ export async function site(
     await interaction.reply({ content: 'Fetching score...' });
     let msg = '';
     let isValidGame = true;
+    // For either both Google and ESPN, we want to get a message (the URL), and a valid check out of the function call
     if (!usesGoogle) {
       [msg, isValidGame] = await scrapeEspn(args);
     } else {
       [msg, isValidGame] = await scrapeGoogle(args);
     }
 
+    // if valid, then create an embed with the message and attached screenshot
     if (isValidGame === true) {
       const file = new MessageAttachment(path);
       const embeddedMessage = embed(msg, args, isValidGame);
@@ -33,6 +35,7 @@ export async function site(
         if (err) throw err;
         console.log('path was deleted.');
       });
+    // If not valid, make user aware of failure to find game
     } else {
       const embeddedMessage = embed(
         'Could not find game on ESPN or Google.',
