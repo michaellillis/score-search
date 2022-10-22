@@ -8,6 +8,7 @@ export async function scrapeEspn(
   triedGoogle = false
 ): Promise<[string, boolean]> {
   let browser: puppeteer.Browser;
+  // Create browser settings to enhance performance 
   let browserSettings: string[] = generateBrowserSettings();
   browser = await puppeteer.launch({
     headless: false,
@@ -21,7 +22,9 @@ export async function scrapeEspn(
   const defaultStyles = 'src/styles/espn/default-layout.css';
   const alternateStyles = 'src/styles/espn/alternate-layout.css';
 
+  // Appending date to google query for more specific results
   let date = new Date();
+  // Remove 10 hours to benefit plausible cases (i.e. early morning search for a game last night)
   date.setHours(date.getHours() - 10);
   const espn = `${input} espn ${date.toLocaleDateString()}`;
 
@@ -33,6 +36,7 @@ export async function scrapeEspn(
     });
     await search(browser, page, espn);
 
+    // Navigate to Box Score tab
     const [boxScoreLink]: any = await page.$x('//a[contains(., "Box Score")]');
     await Promise.all([page.waitForNavigation(), boxScoreLink.click()]);
     url = await urlToString(browser);
@@ -56,7 +60,8 @@ export async function scrapeEspn(
     isValidGame = false;
     console.log(url, isValidGame);
     browser?.close();
-
+    
+    // We want to avoid a loop, so check if we already tried Google before
     if (!triedGoogle) {
       [url, isValidGame] = await scrapeGoogle(input, true);
     }
